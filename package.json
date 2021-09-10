@@ -1,0 +1,23 @@
+{
+  "name": "js-action",
+  "version": "1.0.0",
+  "description": "figure out js action",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "ncc build src/action.js -o dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caseymm/js-action.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caseymm/js-action/issues"
+  },
+  "homepage": "https://github.com/caseymm/js-action#readme",
+  "devDependencies": {
+    "@vercel/ncc": "^0.31.0"
+  }
+}
