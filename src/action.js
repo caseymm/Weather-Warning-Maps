@@ -43,11 +43,11 @@ async function getLatestRFW(){
   const jsonLatest = await respLatest.json();
 
   // if what we just pulls doesn't equal the lastest version we have, save it
-  if(JSON.stringify(json) !== JSON.stringify(jsonLatest)){
+  if(JSON.stringify(json) === JSON.stringify(jsonLatest)){
+    console.log('no new data');
+  } else {
     uploadFile(new Date(), json);
     uploadFile('latest', json);
-  } else {
-    console.log('no new data');
   }
   
 }
