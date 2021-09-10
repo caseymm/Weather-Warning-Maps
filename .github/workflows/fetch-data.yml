@@ -1,5 +1,7 @@
-name: Test
-on: 'push'
+name: Fetch data
+on: 
+  schedule:
+    - cron: '*/15 * * * *'
 
 jobs:
   test:
