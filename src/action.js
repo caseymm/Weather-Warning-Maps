@@ -37,9 +37,19 @@ async function getLatestRFW(){
   const rfwUrl = 'https://services9.arcgis.com/RHVPKKiFTONKtxq3/ArcGIS/rest/services/NWS_Watches_Warnings_v1/FeatureServer/9/query?where=Event%3D%27Red+Flag+Warning%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=';
   const resp = await fetch(rfwUrl);
   const json = await resp.json()
-  // console.log(json)
-  uploadFile(new Date(), json);
-  uploadFile('latest', json);
+
+  const latestFileUrl = 'https://red-flag-warnings.s3.amazonaws.com/latest.json';
+  const respLatest = await fetch(latestFileUrl);
+  const jsonLatest = await respLatest.json();
+
+  // if what we just pulls doesn't equal the lastest version we have, save it
+  if(JSON.stringify(json) !== JSON.stringify(jsonLatest)){
+    uploadFile(new Date(), json);
+    uploadFile('latest', json);
+  } else {
+    console.log('no new data');
+  }
+  
 }
 
 getLatestRFW();
