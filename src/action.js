@@ -1,5 +1,8 @@
 import AWS from 'aws-sdk';
 import fetch from 'node-fetch';
+import gp from "geojson-precision";
+import mapCoordinates from 'geojson-apply-right-hand-rule';
+import simplify from 'simplify-geojson'
 
 // Enter copied or downloaded access ID and secret key here
 const ID = 'AKIA3ZAQNP727TDDT353';
@@ -45,11 +48,33 @@ async function getLatestRFW(){
   // if what we just pulls doesn't equal the lastest version we have, save it
   if(JSON.stringify(json) === JSON.stringify(jsonLatest)){
     console.log('no new data');
-  } else {
+  } 
+  else {
     uploadFile(new Date(), json);
     uploadFile('latest', json);
+
+    // do this only for CA
+    // west of -113.0019105
+    // south of 41.99980888895469
+    let trimmed = gp.parse(json, 3);
+    trimmed.features.forEach(f => {
+      f.geometry.type = "LineString"
+      f.geometry.coordinates = mapCoordinates(f.geometry.coordinates).coordinates[0];
+      f.properties = {"fill": "#e60000","fill-opacity": .6}
+    })
+    let filtered = [];
+    trimmed.features.forEach(f => {
+      let firstCoords = f.geometry.coordinates[0];
+      if(firstCoords[0] < -113.0019105 && firstCoords[1] < 41.99980888895469){
+        filtered.push(f)
+      }
+    })
+    trimmed.features = filtered;
+    let simplified = simplify(trimmed, 0.01)
+    uploadFile('latest-small', simplified);
+    const imageData = `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(${simplified})/[-124.7274,31.4785,-113.7499,43.0816]/450x600@2x?before_layer=admin-0-boundary&access_token=pk.eyJ1IjoiY2FzZXltbWlsZXIiLCJhIjoiY2lpeHY1bnJ1MDAyOHVkbHpucnB1dGRmbyJ9.TzUoCLwyeDoLjh3tkDSD4w`
+    uploadFile('lastet-image-CA', {"image": imageData})
   }
-  
 }
 
 getLatestRFW();
