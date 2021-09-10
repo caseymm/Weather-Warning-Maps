@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "figure out js action",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "ncc build src/action.js -o dist"
@@ -18,6 +19,8 @@
   },
   "homepage": "https://github.com/caseymm/js-action#readme",
   "devDependencies": {
-    "@vercel/ncc": "^0.31.0"
+    "@vercel/ncc": "^0.31.0",
+    "aws-sdk": "^2.986.0",
+    "node-fetch": "^3.0.0"
   }
 }

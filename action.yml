@@ -1,14 +1,6 @@
-name: 'Thank You Action'
-description: 'Say "Thank You" to new pull requests'
+name: 'Push to s3'
+description: 'Push to s3'
 author: 'casey'
-
-inputs:
-  GITHUB_TOKEN:
-    description: 'GitHub token'
-    required: true
-  TENOR_TOKEN:
-    description: 'Tenor API token'
-    required: true
 
 runs:
   using: 'node12'
