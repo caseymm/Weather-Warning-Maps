@@ -3,5 +3,5 @@ description: 'Push to s3'
 author: 'casey'
 
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: 'docker'
+  image: 'Dockerfile'
