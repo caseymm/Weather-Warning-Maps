@@ -2,7 +2,14 @@ import AWS from 'aws-sdk';
 import fetch from 'node-fetch';
 import gp from "geojson-precision";
 import mapCoordinates from 'geojson-apply-right-hand-rule';
-import simplify from 'simplify-geojson'
+import simplify from 'simplify-geojson';
+import twitter from 'twitter-lite';
+const client = new twitter({
+  consumer_key: '9zxrCzPPjLpAkGCiScB3YZQK6' ,  
+  consumer_secret: 'FmO6fYpEhIXJ8nJ2GVLqs6qNk7zOSCWGaYysxW8EMFdI21aGfz',  
+  access_token_key: '1436502122313355265-tkexlgs90gN0XUaR1BOkay89Ju6ACP',  
+  access_token_secret: 'nPvhJi8cDfwHt4HdMNJr7RaZM1M6uDyJz7B4vgFWyl5th'
+});
 
 // Enter copied or downloaded access ID and secret key here
 const ID = 'AKIA3ZAQNP727TDDT353';
@@ -74,6 +81,11 @@ async function getLatestRFW(){
     const data = encodeURIComponent(JSON.stringify(simplified));
     const imageData = `https://api.mapbox.com/styles/v1/caseymmiler/cktf3jdcs2ws819qttibvokom/static/geojson(${data})/-119.2368,37.4522,4.99,0/500x600@2x?before_layer=admin-0-boundary&access_token=pk.eyJ1IjoiY2FzZXltbWlsZXIiLCJhIjoiY2lpeHY1bnJ1MDAyOHVkbHpucnB1dGRmbyJ9.TzUoCLwyeDoLjh3tkDSD4w`
     uploadFile('lastet-image-CA', {"image": imageData})
+
+
+    client.post('statuses/update', { status: `RFW updated`,  }).then(result => {
+      console.log('You successfully tweeted this : "' + result.text + '"');
+    }).catch(console.error);
   }
 }
 
