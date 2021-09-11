@@ -48,8 +48,7 @@ async function getLatestRFW(){
   // if what we just pulls doesn't equal the lastest version we have, save it
   if(JSON.stringify(json) === JSON.stringify(jsonLatest)){
     console.log('no new data');
-  } 
-  else {
+  } else {
     uploadFile(new Date(), json);
     uploadFile('latest', json);
 
@@ -72,7 +71,8 @@ async function getLatestRFW(){
     trimmed.features = filtered;
     let simplified = simplify(trimmed, 0.01)
     uploadFile('latest-small', simplified);
-    const imageData = `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson(${simplified})/[-124.7274,31.4785,-113.7499,43.0816]/450x600@2x?before_layer=admin-0-boundary&access_token=pk.eyJ1IjoiY2FzZXltbWlsZXIiLCJhIjoiY2lpeHY1bnJ1MDAyOHVkbHpucnB1dGRmbyJ9.TzUoCLwyeDoLjh3tkDSD4w`
+    const data = encodeURIComponent(JSON.stringify(simplified));
+    const imageData = `https://api.mapbox.com/styles/v1/caseymmiler/cktf3jdcs2ws819qttibvokom/static/geojson(${data})/-119.2368,37.4522,4.99,0/500x600@2x?before_layer=admin-0-boundary&access_token=pk.eyJ1IjoiY2FzZXltbWlsZXIiLCJhIjoiY2lpeHY1bnJ1MDAyOHVkbHpucnB1dGRmbyJ9.TzUoCLwyeDoLjh3tkDSD4w`
     uploadFile('lastet-image-CA', {"image": imageData})
   }
 }
