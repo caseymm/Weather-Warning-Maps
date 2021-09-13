@@ -1,5 +1,4 @@
 import AWS from 'aws-sdk';
-import fs from 'fs';
 import fetch from 'node-fetch';
 import gp from "geojson-precision";
 import mapCoordinates from 'geojson-apply-right-hand-rule';
@@ -10,6 +9,13 @@ const client = new twitter({
   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,  
   access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,  
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+});
+const uploadClient = new twitter({
+  consumer_key: process.env.TWITTER_CONSUMER_KEY,  
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,  
+  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,  
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+  subdomain: "upload"
 });
 
 // The name of the bucket that you have created
@@ -38,11 +44,26 @@ const uploadFile = (name, data, ext) => {
   });
 };
 
+async function getObject (bucket, objectKey) {
+  try {
+    const params = {
+      Bucket: bucket,
+      Key: objectKey 
+    }
+
+    const data = await s3.getObject(params).promise();
+    return data.Body.toString('base64');
+  } catch (e) {
+    throw new Error(`Could not retrieve file from S3: ${e.message}`)
+  }
+}
+
 async function saveImage(url){
   const resp = await fetch(url);
   // save to s3
   uploadFile(`${new Date()}-img`, resp.body, 'png');
   uploadFile(`latest-img`, resp.body, 'png');
+  return;
 }
 
 async function getLatestRFW(){
@@ -82,25 +103,23 @@ async function getLatestRFW(){
     uploadFile('latest-small', JSON.stringify(simplified), 'json');
     const data = encodeURIComponent(JSON.stringify(simplified));
     const imageData = `https://api.mapbox.com/styles/v1/caseymmiler/cktf3jdcs2ws819qttibvokom/static/geojson(${data})/-119.2368,37.4522,4.99,0/500x600@2x?before_layer=admin-0-boundary&access_token=pk.eyJ1IjoiY2FzZXltbWlsZXIiLCJhIjoiY2lpeHY1bnJ1MDAyOHVkbHpucnB1dGRmbyJ9.TzUoCLwyeDoLjh3tkDSD4w`
-    saveImage(imageData)
+    saveImage(imageData).then(() => {
+      console.log('saved images')
+      getObject(BUCKET_NAME, 'latest-img.png').then(img => {
 
-    client.post('statuses/update', { status: `RFW updated: https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest-img.png` }).then(result => {
-      console.log('You successfully tweeted this : "' + result.text + '"');
-    }).catch(console.error);
+        uploadClient.post('media/upload', { media_data: img }).then(result => {
+          const status = {
+            status: "New Red Flag Warning",
+            media_ids: result.media_id_string
+          }
+          client.post('statuses/update', status).then(result => {
+            console.log('You successfully tweeted this : "' + result.text + '"');
+          }).catch(console.error);
+        }).catch(console.error);
+      });
+      
+    })
   }
 }
 
 getLatestRFW();
-
-
-
-// client.post('media/upload', { media: resp.body }).then(result => {
-  //   console.log(result)
-  //   const status = {
-  //     status: "I tweeted from Node.js!",
-  //     media_ids: result.media_id_string
-  //   }
-  //   // client.post('statuses/update', { status: status  }).then(result => {
-  //   //   console.log('You successfully tweeted this : "' + result.text + '"');
-  //   // }).catch(conole.error);
-  // }).catch(console.error);
