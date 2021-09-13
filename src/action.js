@@ -5,15 +5,15 @@ import mapCoordinates from 'geojson-apply-right-hand-rule';
 import simplify from 'simplify-geojson';
 import twitter from 'twitter-lite';
 const client = new twitter({
-  consumer_key: '9zxrCzPPjLpAkGCiScB3YZQK6' ,  
-  consumer_secret: 'FmO6fYpEhIXJ8nJ2GVLqs6qNk7zOSCWGaYysxW8EMFdI21aGfz',  
-  access_token_key: '1436502122313355265-tkexlgs90gN0XUaR1BOkay89Ju6ACP',  
-  access_token_secret: 'nPvhJi8cDfwHt4HdMNJr7RaZM1M6uDyJz7B4vgFWyl5th'
+  consumer_key: process.env.TWITTER_CONSUMER_KEY,  
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,  
+  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,  
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
 // Enter copied or downloaded access ID and secret key here
-const ID = 'AKIA3ZAQNP727TDDT353';
-const SECRET = '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';
+const ID = process.env.AWS_ID;
+const SECRET = process.env.AWS_SECRET;
 
 // The name of the bucket that you have created
 const BUCKET_NAME = 'red-flag-warnings';
@@ -53,9 +53,9 @@ async function getLatestRFW(){
   const jsonLatest = await respLatest.json();
 
   // if what we just pulls doesn't equal the lastest version we have, save it
-  if(JSON.stringify(json) === JSON.stringify(jsonLatest)){
-    console.log('no new data');
-  } else {
+  // if(JSON.stringify(json) === JSON.stringify(jsonLatest)){
+  //   console.log('no new data');
+  // } else {
     uploadFile(new Date(), json);
     uploadFile('latest', json);
 
@@ -87,6 +87,6 @@ async function getLatestRFW(){
       console.log('You successfully tweeted this : "' + result.text + '"');
     }).catch(console.error);
   }
-}
+// }
 
 getLatestRFW();
