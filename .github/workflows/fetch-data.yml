@@ -1,7 +1,8 @@
 name: Fetch data
-on: 
-  schedule:
-    - cron: '*/15 * * * *'
+on: 'push'
+  # schedule:
+  #   - cron: '*/15 * * * *'
+
 env: 
   AWS_ID: ${{ secrets.AWS_ID }}
   AWS_SECRET: ${{ secrets.AWS_SECRET }}
