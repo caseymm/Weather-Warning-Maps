@@ -11,16 +11,12 @@ const client = new twitter({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
-// Enter copied or downloaded access ID and secret key here
-const ID = process.env.AWS_ID;
-const SECRET = process.env.AWS_SECRET;
-
 // The name of the bucket that you have created
 const BUCKET_NAME = 'red-flag-warnings';
 
 const s3 = new AWS.S3({
-  accessKeyId: ID,
-  secretAccessKey: SECRET
+  accessKeyId: process.env.AWS_ID,
+  secretAccessKey: process.env.AWS_SECRET
 });
 
 const uploadFile = (name, data) => {
