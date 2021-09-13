@@ -1,4 +1,5 @@
 import AWS from 'aws-sdk';
+import fs from 'fs';
 import fetch from 'node-fetch';
 import gp from "geojson-precision";
 import mapCoordinates from 'geojson-apply-right-hand-rule';
@@ -19,13 +20,13 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.AWS_SECRET
 });
 
-const uploadFile = (name, data) => {
+const uploadFile = (name, data, ext) => {
 
   // Setting up S3 upload parameters
   const params = {
       Bucket: BUCKET_NAME,
-      Key: `${name}.json`, // File name you want to save as in S3
-      Body: JSON.stringify(data)
+      Key: `${name}.${ext}`, // File name you want to save as in S3
+      Body: data
   };
 
   // Uploading files to the bucket
@@ -37,6 +38,13 @@ const uploadFile = (name, data) => {
   });
 };
 
+async function saveImage(url){
+  const resp = await fetch(url);
+  // save to s3
+  uploadFile(`${new Date()}-img`, resp.body, 'png');
+  uploadFile(`latest-img`, resp.body, 'png');
+}
+
 async function getLatestRFW(){
   const rfwUrl = 'https://services9.arcgis.com/RHVPKKiFTONKtxq3/ArcGIS/rest/services/NWS_Watches_Warnings_v1/FeatureServer/9/query?where=Event%3D%27Red+Flag+Warning%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=';
   const resp = await fetch(rfwUrl);
@@ -47,11 +55,11 @@ async function getLatestRFW(){
   const jsonLatest = await respLatest.json();
 
   // if what we just pulls doesn't equal the lastest version we have, save it
-  // if(JSON.stringify(json) === JSON.stringify(jsonLatest)){
-  //   console.log('no new data');
-  // } else {
-    uploadFile(new Date(), json);
-    uploadFile('latest', json);
+  if(JSON.stringify(json) === JSON.stringify(jsonLatest)){
+    console.log('no new data');
+  } else {
+    uploadFile(new Date(), JSON.stringify(json), 'json');
+    uploadFile('latest', JSON.stringify(json), 'json');
 
     // do this only for CA
     // west of -113.0019105
@@ -71,16 +79,28 @@ async function getLatestRFW(){
     })
     trimmed.features = filtered;
     let simplified = simplify(trimmed, 0.01)
-    uploadFile('latest-small', simplified);
+    uploadFile('latest-small', JSON.stringify(simplified), 'json');
     const data = encodeURIComponent(JSON.stringify(simplified));
     const imageData = `https://api.mapbox.com/styles/v1/caseymmiler/cktf3jdcs2ws819qttibvokom/static/geojson(${data})/-119.2368,37.4522,4.99,0/500x600@2x?before_layer=admin-0-boundary&access_token=pk.eyJ1IjoiY2FzZXltbWlsZXIiLCJhIjoiY2lpeHY1bnJ1MDAyOHVkbHpucnB1dGRmbyJ9.TzUoCLwyeDoLjh3tkDSD4w`
-    uploadFile('lastet-image-CA', {"image": imageData})
+    saveImage(imageData)
 
-
-    client.post('statuses/update', { status: `RFW updated`,  }).then(result => {
+    client.post('statuses/update', { status: `RFW updated: https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest-img.png` }).then(result => {
       console.log('You successfully tweeted this : "' + result.text + '"');
     }).catch(console.error);
   }
-// }
+}
 
 getLatestRFW();
+
+
+
+// client.post('media/upload', { media: resp.body }).then(result => {
+  //   console.log(result)
+  //   const status = {
+  //     status: "I tweeted from Node.js!",
+  //     media_ids: result.media_id_string
+  //   }
+  //   // client.post('statuses/update', { status: status  }).then(result => {
+  //   //   console.log('You successfully tweeted this : "' + result.text + '"');
+  //   // }).catch(conole.error);
+  // }).catch(console.error);
