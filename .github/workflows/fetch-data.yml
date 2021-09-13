@@ -2,6 +2,13 @@ name: Fetch data
 on: 
   schedule:
     - cron: '*/15 * * * *'
+env: 
+  AWS_ID: ${{ secrets.AWS_ID }}
+  AWS_SECRET: ${{ secrets.AWS_SECRET }}
+  TWITTER_ACCESS_TOKEN_KEY: ${{ secrets.TWITTER_ACCESS_TOKEN_KEY }}
+  TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+  TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
+  TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
 
 jobs:
   test:
@@ -9,10 +16,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
-        env: 
-          AWS_ID: ${{ secrets.AWS_ID }}
-          AWS_SECRET: ${{ secrets.AWS_SECRET }}
-          TWITTER_ACCESS_TOKEN_KEY: ${{ secrets.TWITTER_ACCESS_TOKEN_KEY }}
-          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
-          TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
-          TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+
