@@ -1,8 +1,10 @@
 import AWS from 'aws-sdk';
 import fetch from 'node-fetch';
 import twitter from 'twitter-lite';
-import path from 'path';
-const __dirname = path.resolve(path.dirname(''));
+import { URL } from 'url'; // in Browser, the URL in native accessible on window
+const __filename = new URL('', import.meta.url).pathname;
+// Will contain trailing slash
+const __dirname = new URL('.', import.meta.url).pathname;
 import puppeteer from "puppeteer";
 
 const client = new twitter({
