@@ -1,8 +1,8 @@
 import AWS from 'aws-sdk';
 import fetch from 'node-fetch';
 import twitter from 'twitter-lite';
-import {dirname} from "path";
-globalThis.__dirname = dirname(import.meta.url);
+import path from 'path';
+const __dirname = path.resolve(path.dirname(''));
 import puppeteer from "puppeteer";
 
 const client = new twitter({
