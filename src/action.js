@@ -1,9 +1,8 @@
 import AWS from 'aws-sdk';
 import fetch from 'node-fetch';
-import gp from "geojson-precision";
-import mapCoordinates from 'geojson-apply-right-hand-rule';
-import simplify from 'simplify-geojson';
 import twitter from 'twitter-lite';
+import puppeteer from "puppeteer";
+
 const client = new twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,  
   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,  
@@ -58,12 +57,28 @@ async function getObject (bucket, objectKey) {
   }
 }
 
-async function saveImage(url){
-  const resp = await fetch(url);
-  // save to s3
-  uploadFile(`latest-img`, resp.body, 'png');
-  uploadFile(`${new Date()}-img`, resp.body, 'png');
-  return;
+async function useTheData(){
+  let browser = null;
+  try {
+    // launch headless Chromium browser
+    browser = await puppeteer.launch({ headless: true });
+    // create new page object
+    const page = await browser.newPage();
+    // set viewport width and height
+    await page.setViewport({ width: 1440, height: 1080 });
+    await page.goto("https://caseymm.github.io/mbx-devour/?url=https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest.json&fill=e60000&fill-opacity=.6", { waitUntil: 'networkidle0' });
+    // capture screenshot and store it into screenshots directory.
+    const screenshot = await page.screenshot();
+    uploadFile(`latest-img`, screenshot, 'png');
+    uploadFile(`${new Date()}-img`, screenshot, 'png');
+  } catch (err) {
+    console.log(`❌ Error: ${err.message}`);
+    return;
+  } finally {
+    await browser.close();
+    console.log(`\n🎉 screenshots captured.`);
+    return;
+  }
 }
 
 async function getLatestRFW(){
@@ -82,32 +97,9 @@ async function getLatestRFW(){
     uploadFile(new Date(), JSON.stringify(json), 'json');
     uploadFile('latest', JSON.stringify(json), 'json');
 
-    // do this only for CA
-    // west of -113.0019105
-    // south of 41.99980888895469
-    let trimmed = gp.parse(json, 3);
-    trimmed.features.forEach(f => {
-      f.geometry.type = "LineString"
-      f.geometry.coordinates = mapCoordinates(f.geometry.coordinates).coordinates[0];
-      f.properties = {"fill": "#e60000","fill-opacity": .6}
-    })
-    let filtered = [];
-    trimmed.features.forEach(f => {
-      let firstCoords = f.geometry.coordinates[0];
-      if(firstCoords[0] < -113.0019105 && firstCoords[1] < 41.99980888895469){
-        filtered.push(f)
-      }
-    })
-    trimmed.features = filtered;
-    let simplified = simplify(trimmed, 0.01)
-    uploadFile('latest-small', JSON.stringify(simplified), 'json');
-    const data = encodeURIComponent(JSON.stringify(simplified));
-    const imageData = `https://api.mapbox.com/styles/v1/caseymmiler/cktf3jdcs2ws819qttibvokom/static/geojson(${data})/-119.2368,37.4522,4.99,0/500x600@2x?before_layer=admin-0-boundary&access_token=pk.eyJ1IjoiY2FzZXltbWlsZXIiLCJhIjoiY2lpeHY1bnJ1MDAyOHVkbHpucnB1dGRmbyJ9.TzUoCLwyeDoLjh3tkDSD4w`
-    saveImage(imageData).then(() => {
-      console.log('saved images')
+    useTheData().then(stuff => {
       getObject(BUCKET_NAME, 'latest-img.png').then(img => {
-
-        uploadClient.post('media/upload', { media_data: img }).then(result => {
+        uploadClient.post('media/upload', { media: img }).then(result => {
           const status = {
             status: "New Red Flag Warning",
             media_ids: result.media_id_string
@@ -117,8 +109,8 @@ async function getLatestRFW(){
           }).catch(console.error);
         }).catch(console.error);
       });
-      
     })
+
   }
 }
 
