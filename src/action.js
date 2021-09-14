@@ -61,8 +61,8 @@ async function getObject (bucket, objectKey) {
 async function saveImage(url){
   const resp = await fetch(url);
   // save to s3
-  uploadFile(`${new Date()}-img`, resp.body, 'png');
   uploadFile(`latest-img`, resp.body, 'png');
+  uploadFile(`${new Date()}-img`, resp.body, 'png');
   return;
 }
 

@@ -25,8 +25,10 @@
     "node-fetch": "^3.0.0"
   },
   "dependencies": {
+    "@turf/simplify": "^6.5.0",
     "dotenv": "^10.0.0",
     "geojson-apply-right-hand-rule": "^1.0.7",
+    "geojson-dissolve": "^3.1.0",
     "geojson-precision": "^1.0.0",
     "simplify-geojson": "^1.0.4",
     "twitter-lite": "^1.1.0"
