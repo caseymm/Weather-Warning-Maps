@@ -59,7 +59,7 @@ async function getObject (bucket, objectKey) {
 
 async function useTheData(){
   let browser = null;
-  try {
+  // try {
     // launch headless Chromium browser
     browser = await puppeteer.launch({ headless: true });
     // create new page object
@@ -71,14 +71,14 @@ async function useTheData(){
     const screenshot = await page.screenshot();
     uploadFile(`latest-img`, screenshot, 'png');
     uploadFile(`${new Date()}-img`, screenshot, 'png');
-  } catch (err) {
-    console.log(`❌ Error: ${err.message}`);
-    return;
-  } finally {
+  // } catch (err) {
+  //   console.log(`❌ Error: ${err.message}`);
+  //   return;
+  // } finally {
     await browser.close();
     console.log(`\n🎉 screenshots captured.`);
     return;
-  }
+  // }
 }
 
 async function getLatestRFW(){
