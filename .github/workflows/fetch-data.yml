@@ -16,12 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm install
-      - run: npm install playwright-chromium
         with:
-            node-version: 14.17.1
-
-        run: |
-          yarn run-script
+            node-version: '14.17.1'
+      - run: npm install
+      - run: npm install playwright-chromiu
+        run: yarn run-script
       # - uses: ./
 
