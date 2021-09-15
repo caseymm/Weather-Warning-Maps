@@ -19,7 +19,7 @@ jobs:
         with:
             node-version: '14.17.1'
       - run: npm install
-      - run: npm install playwright-chromiu
+      - run: npm install playwright-chromium
       - run: yarn run-script
       # - uses: ./
 
