@@ -60,16 +60,16 @@ async function getObject (bucket, objectKey) {
 }
 
 async function useTheData(){
-  for (const browserType of ['chromium']) {
-    const browser = await playwright[browserType].launch();
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    await page.goto("https://caseymm.github.io/mbx-devour/?url=https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest.json&fill=e60000&fill-opacity=.6", { waitUntil: 'networkidle0' });
-    const screenshot = await page.screenshot();
-    uploadFile(`latest-img`, screenshot, 'png');
-    uploadFile(`${new Date()}-img`, screenshot, 'png');
-    await browser.close();
-  }
+  // for (const browserType of ['chromium']) {
+  //   const browser = await playwright[browserType].launch();
+  //   const context = await browser.newContext();
+  //   const page = await context.newPage();
+  //   await page.goto("https://caseymm.github.io/mbx-devour/?url=https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest.json&fill=e60000&fill-opacity=.6", { waitUntil: 'networkidle0' });
+  //   const screenshot = await page.screenshot();
+  //   uploadFile(`latest-img`, screenshot, 'png');
+  //   uploadFile(`${new Date()}-img`, screenshot, 'png');
+  //   await browser.close();
+  // }
   // let browser = null;
   // // try {
   //   // launch headless Chromium browser
