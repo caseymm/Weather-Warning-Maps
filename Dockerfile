@@ -1,4 +1,5 @@
 FROM node:16-alpine
-COPY dist dist
+COPY src src
+WORKDIR /
 RUN npm install
 ENTRYPOINT [ "node", "/src/index.js" ]
