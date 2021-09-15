@@ -60,8 +60,11 @@ async function getObject (bucket, objectKey) {
 async function useTheData(){
   // this is where screenshot stuff goes
   const browser = await playwright['chromium'].launch();
-  const context = await browser.newContext();
+  const context = await browser.newContext({
+    deviceScaleFactor: 2
+  });
   const page = await context.newPage();
+  await page.setViewportSize({ width: 1200, height: 800 });
   await page.goto("https://caseymm.github.io/mbx-devour/?url=https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest.json&fill=e60000&fill-opacity=.6", { waitUntil: 'networkidle0' });
   const screenshot = await page.screenshot();
   uploadFile(`latest-img`, screenshot, 'png');
@@ -80,9 +83,9 @@ async function getLatestRFW(){
   const jsonLatest = await respLatest.json();
 
   // if what we just pulls doesn't equal the lastest version we have, save it
-  // if(JSON.stringify(json) === JSON.stringify(jsonLatest)){
-  //   console.log('no new data');
-  // } else {
+  if(JSON.stringify(json) === JSON.stringify(jsonLatest)){
+    console.log('no new data');
+  } else {
     uploadFile(new Date(), JSON.stringify(json), 'json');
     uploadFile('latest', JSON.stringify(json), 'json');
 
@@ -99,8 +102,7 @@ async function getLatestRFW(){
         }).catch(console.error);
       });
     })
-
-  // }
+  }
 }
 
 getLatestRFW();
