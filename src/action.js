@@ -58,7 +58,7 @@ async function getObject (bucket, objectKey) {
 }
 
 async function useTheData(){
-  const browser = await playwright['chromium'].launch();
+  const browser = await playwright['webkit'].launch();
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto("https://caseymm.github.io/mbx-devour/?url=https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest.json&fill=e60000&fill-opacity=.6", { waitUntil: 'networkidle0' });
