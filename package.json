@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "ncc build src/action.js -o dist",
     "run-script": "node -r dotenv/config src/action.js"
   },
   "repository": {

@@ -17,5 +17,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
-      - uses: microsoft/playwright-github-action@v1
 
