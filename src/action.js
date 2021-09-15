@@ -59,7 +59,7 @@ async function getObject (bucket, objectKey) {
 
 async function useTheData(){
   const browser = await playwright['chromium'].launch({
-    executablePath: '/usr/src/app/node_modules/playwright'
+    executablePath: '/usr/lib/playwright'
   });
   const context = await browser.newContext();
   const page = await context.newPage();
