@@ -1,8 +1,9 @@
 import AWS from 'aws-sdk';
 import fetch from 'node-fetch';
 import twitter from 'twitter-lite';
-import puppeteer from "puppeteer";
-import chromium from "chromium";
+// import puppeteer from "puppeteer";
+// import chromium from "chromium";
+import playwright from 'playwright';
 
 const client = new twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,  
@@ -59,27 +60,37 @@ async function getObject (bucket, objectKey) {
 }
 
 async function useTheData(){
-  let browser = null;
-  // try {
-    // launch headless Chromium browser
-    browser = await puppeteer.launch({ headless: true, executablePath: chromium.path });
-    // create new page object
-    const page = await browser.newPage();
-    // set viewport width and height
-    await page.setViewport({ width: 1440, height: 1080 });
+  for (const browserType of ['chromium']) {
+    const browser = await playwright[browserType].launch();
+    const context = await browser.newContext();
+    const page = await context.newPage();
     await page.goto("https://caseymm.github.io/mbx-devour/?url=https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest.json&fill=e60000&fill-opacity=.6", { waitUntil: 'networkidle0' });
-    // capture screenshot and store it into screenshots directory.
     const screenshot = await page.screenshot();
     uploadFile(`latest-img`, screenshot, 'png');
     uploadFile(`${new Date()}-img`, screenshot, 'png');
-  // } catch (err) {
-  //   console.log(`❌ Error: ${err.message}`);
-  //   return;
-  // } finally {
     await browser.close();
-    console.log(`\n🎉 screenshots captured.`);
-    return;
-  // }
+  }
+  // let browser = null;
+  // // try {
+  //   // launch headless Chromium browser
+  //   browser = await puppeteer.launch({ headless: true, executablePath: chromium.path });
+  //   // create new page object
+  //   const page = await browser.newPage();
+  //   // set viewport width and height
+  //   await page.setViewport({ width: 1440, height: 1080 });
+  //   await page.goto("https://caseymm.github.io/mbx-devour/?url=https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest.json&fill=e60000&fill-opacity=.6", { waitUntil: 'networkidle0' });
+  //   // capture screenshot and store it into screenshots directory.
+  //   const screenshot = await page.screenshot();
+  //   uploadFile(`latest-img`, screenshot, 'png');
+  //   uploadFile(`${new Date()}-img`, screenshot, 'png');
+  // // } catch (err) {
+  // //   console.log(`❌ Error: ${err.message}`);
+  // //   return;
+  // // } finally {
+  //   await browser.close();
+  //   console.log(`\n🎉 screenshots captured.`);
+  //   return;
+  // // }
 }
 
 async function getLatestRFW(){
