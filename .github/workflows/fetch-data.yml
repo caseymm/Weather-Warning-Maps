@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-            run: |
+            args: |
               import { dirname } from 'path';
               import { fileURLToPath } from 'url';
               const __dirname = dirname(fileURLToPath(import.meta.url));
