@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       with:
-            args: |
-              import { dirname } from 'path'; import { fileURLToPath } from 'url'; const __dirname = dirname(fileURLToPath(import.meta.url));
+        args: |
+          import { dirname } from 'path'; import { fileURLToPath } from 'url'; const __dirname = dirname(fileURLToPath(import.meta.url));
       - uses: actions/checkout@v2
       - uses: ./
 
