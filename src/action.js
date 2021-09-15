@@ -62,7 +62,7 @@ async function useTheData(){
   let browser = null;
   // try {
     // launch headless Chromium browser
-    browser = await puppeteer.launch({ headless: true, executablePath: chromium });
+    browser = await puppeteer.launch({ headless: true, executablePath: chromium.path });
     // create new page object
     const page = await browser.newPage();
     // set viewport width and height
