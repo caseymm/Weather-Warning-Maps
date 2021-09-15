@@ -3,6 +3,11 @@ on: 'push'
   # schedule:
   #   - cron: '*/10 * * * *'
 
+with:
+    args: |
+      import { dirname } from 'path'; import { fileURLToPath } from 'url'; const __dirname = dirname(fileURLToPath(import.meta.url));
+
+
 env: 
   AWS_ID: ${{ secrets.AWS_ID }}
   AWS_SECRET: ${{ secrets.AWS_SECRET }}
@@ -15,9 +20,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      with:
-        args: |
-          import { dirname } from 'path'; import { fileURLToPath } from 'url'; const __dirname = dirname(fileURLToPath(import.meta.url));
       - uses: actions/checkout@v2
       - uses: ./
 
