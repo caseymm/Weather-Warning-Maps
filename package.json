@@ -24,6 +24,7 @@
     "node-fetch": "^3.0.0"
   },
   "dependencies": {
+    "chromium": "^3.0.2",
     "dotenv": "^10.0.0",
     "puppeteer": "^10.2.0",
     "twitter-lite": "^1.1.0"

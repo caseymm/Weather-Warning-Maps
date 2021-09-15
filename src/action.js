@@ -2,6 +2,7 @@ import AWS from 'aws-sdk';
 import fetch from 'node-fetch';
 import twitter from 'twitter-lite';
 import puppeteer from "puppeteer";
+import chromium from "chromium";
 
 const client = new twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,  
@@ -61,7 +62,7 @@ async function useTheData(){
   let browser = null;
   // try {
     // launch headless Chromium browser
-    browser = await puppeteer.launch({ headless: true });
+    browser = await puppeteer.launch({ headless: true, executablePath: chromium });
     // create new page object
     const page = await browser.newPage();
     // set viewport width and height
