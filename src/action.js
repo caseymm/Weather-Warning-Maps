@@ -1,7 +1,9 @@
+import { createRequireFromPath } from 'module';
+const puppeteer = createRequireFromPath('puppeteer');
 import AWS from 'aws-sdk';
 import fetch from 'node-fetch';
 import twitter from 'twitter-lite';
-import puppeteer from "puppeteer";
+// import puppeteer from "puppeteer";
 
 const client = new twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,  
