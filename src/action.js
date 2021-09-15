@@ -61,10 +61,7 @@ async function useTheData(){
   // const browser = await playwright['chromium'].launch({
   //   executablePath: '/usr/lib/playwright'
   // });
-  const browser = await puppeteer.launch({
-    headless:false,
-    args: ["--no-sandbox"]
-  });
+  const browser = await playwright['chromium'].launch({args: ['--no-sandbox', '--disable-setuid-sandbox', '--single-process']});
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto("https://caseymm.github.io/mbx-devour/?url=https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest.json&fill=e60000&fill-opacity=.6", { waitUntil: 'networkidle0' });
