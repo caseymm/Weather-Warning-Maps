@@ -58,8 +58,12 @@ async function getObject (bucket, objectKey) {
 }
 
 async function useTheData(){
-  const browser = await playwright['chromium'].launch({
-    executablePath: '/usr/lib/playwright'
+  // const browser = await playwright['chromium'].launch({
+  //   executablePath: '/usr/lib/playwright'
+  // });
+  const browser = await puppeteer.launch({
+    headless:false,
+    args: ["--no-sandbox"]
   });
   const context = await browser.newContext();
   const page = await context.newPage();
