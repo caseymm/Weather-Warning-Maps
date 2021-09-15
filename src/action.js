@@ -1,6 +1,7 @@
 import AWS from 'aws-sdk';
 import fetch from 'node-fetch';
 import twitter from 'twitter-lite';
+import playwright from 'playwright';
 
 const client = new twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,  
@@ -58,15 +59,15 @@ async function getObject (bucket, objectKey) {
 
 async function useTheData(){
   // this is where screenshot stuff goes
-  // const browser = await playwright['chromium'].launch();
-  // const context = await browser.newContext();
-  // const page = await context.newPage();
-  // await page.goto("https://caseymm.github.io/mbx-devour/?url=https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest.json&fill=e60000&fill-opacity=.6", { waitUntil: 'networkidle0' });
-  // const screenshot = await page.screenshot();
-  // uploadFile(`latest-img`, screenshot, 'png');
-  // uploadFile(`${new Date()}-img`, screenshot, 'png');
-  // await browser.close();
-  return;
+  const browser = await playwright['chromium'].launch();
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.goto("https://caseymm.github.io/mbx-devour/?url=https://red-flag-warnings.s3.us-west-1.amazonaws.com/latest.json&fill=e60000&fill-opacity=.6", { waitUntil: 'networkidle0' });
+  const screenshot = await page.screenshot();
+  uploadFile(`latest-img`, screenshot, 'png');
+  uploadFile(`${new Date()}-img`, screenshot, 'png');
+  await browser.close();
+  // return;
 }
 
 async function getLatestRFW(){
