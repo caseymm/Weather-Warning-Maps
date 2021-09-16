@@ -114,6 +114,7 @@ async function useTheData(folder, color){
   await uploadFile(`${folder}/latest-img`, screenshot, 'png');
   await uploadFile(`${folder}/${dateStr}-img`, screenshot, 'png');
   await browser.close();
+  return;
 }
 
 async function getLatestRFW(weatherEvent){
