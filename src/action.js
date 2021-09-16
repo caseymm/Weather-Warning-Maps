@@ -7,15 +7,21 @@ import dateFormat from 'dateformat';
 const events = {
   'Red Flag Warning': {
     'folder': 'rfw',
-    'color': 'e60000'
+    'color': 'e60000',
+    'message': '🚩 New Red Flag Warning 🚩 \n\n A Red Flag Warning has been issued for these areas. Weather events which may result in extreme fire behavior that will occur within 24 hours. This is the highest alert. Please use extreme caution.',
+    'alt_message': '🚩 New Red Flag Warning 🚩 \n\n There are currently no Red Flag Warnings.'
   },
   'Fire Weather Watch': {
     'folder': 'fww',
-    'color': 'ff6d05'
+    'color': 'ff6d05',
+    'message': '🏳 New Fire Weather Watch Alert 🏳 \n\n A Fire Weather Watch has been issued for these areas. Weather events which may result in extreme fire behavior could exist in the next 12-72 hours.',
+    'alt_message': '🏳 New Fire Weather Watch Alert 🏳 \n\n There are currently no areas under a Fire Weather Watch Alert.'
   },
   'Severe Thunderstorm Watch': {
     'folder': 'stw',
-    'color': '2308d1'
+    'color': '808c9e',
+    'message': '⛈ New Severe Thunderstorm Watch ⛈',
+    'alt_message': '⛈ New Severe Thunderstorm Watch ⛈ \n\n There are currently no areas under advisement for Severe Thunderstorm Watch.'
   }
 }
 
@@ -95,6 +101,7 @@ async function getLatestRFW(weatherEvent){
     console.log(weatherEvent)
     const folder = events[weatherEvent].folder;
     const color = events[weatherEvent].color;
+    let message = events[weatherEvent].message;
 
     const rfwUrl = `https://services9.arcgis.com/RHVPKKiFTONKtxq3/ArcGIS/rest/services/NWS_Watches_Warnings_v1/FeatureServer/9/query?where=Event%3D%27${weatherEvent}%27&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&returnGeodetic=false&outFields=&returnGeometry=true&returnCentroid=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token=`;
     const resp = await fetch(rfwUrl);
@@ -111,11 +118,14 @@ async function getLatestRFW(weatherEvent){
       uploadFile(`${folder}/${dateStr}`, JSON.stringify(json), 'json');
       uploadFile(`${folder}/latest`, JSON.stringify(json), 'json');
 
+      if(json.features.length === 0){
+        message = events[weatherEvent].alt_message;
+      }
       useTheData(folder, color).then(stuff => {
         getObject(BUCKET_NAME, `${folder}/latest-img.png`).then(img => {
           uploadClient.post('media/upload', { media: img }).then(result => {
             const status = {
-              status: `New ${weatherEvent} data`,
+              status: message,
               media_ids: result.media_id_string
             }
             client.post('statuses/update', status).then(result => {
@@ -125,7 +135,6 @@ async function getLatestRFW(weatherEvent){
         });
       })
     }
-  
 }
 
 Object.keys(events).forEach(weatherEvent => {
