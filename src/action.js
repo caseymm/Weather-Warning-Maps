@@ -43,7 +43,7 @@ const uploadClient = new twitter({
 });
 
 // The name of the bucket that you have created
-const BUCKET_NAME = 'red-flag-warnings';
+const BUCKET_NAME = 'weather-warnings';
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ID,
@@ -90,7 +90,7 @@ async function useTheData(folder, color){
   });
   const page = await context.newPage();
   await page.setViewportSize({ width: 1200, height: 800 });
-  await page.goto(`https://caseymm.github.io/mbx-devour/?url=https://red-flag-warnings.s3.us-west-1.amazonaws.com/${folder}/latest.json&fill=${color}&fill-opacity=.6`, { waitUntil: 'networkidle0' });
+  await page.goto(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/latest.json&fill=${color}&fill-opacity=.6`, { waitUntil: 'networkidle0' });
   const screenshot = await page.screenshot();
   uploadFile(`${folder}/latest-img`, screenshot, 'png');
   uploadFile(`${folder}/${dateStr}-img`, screenshot, 'png');
@@ -107,7 +107,7 @@ async function getLatestRFW(weatherEvent){
     const resp = await fetch(rfwUrl);
     const json = await resp.json()
 
-    const latestFileUrl = `https://red-flag-warnings.s3.amazonaws.com/${folder}/latest.json`;
+    const latestFileUrl = `https://weather-warnings.s3.amazonaws.com/${folder}/latest.json`;
     const respLatest = await fetch(latestFileUrl);
     const jsonLatest = await respLatest.json();
 
