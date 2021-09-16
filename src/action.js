@@ -68,7 +68,7 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.AWS_SECRET
 });
 
-const uploadFile = (name, data, ext) => {
+async function uploadFile(name, data, ext) {
 
   // Setting up S3 upload parameters
   const params = {
@@ -111,8 +111,8 @@ async function useTheData(folder, color){
   await page.goto(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/latest.json&fill=${color}&fill-opacity=.6`, { waitUntil: 'networkidle' });
   await page.waitForSelector('#hidden', {state: 'hidden'});
   const screenshot = await page.screenshot();
-  uploadFile(`${folder}/latest-img`, screenshot, 'png');
-  uploadFile(`${folder}/${dateStr}-img`, screenshot, 'png');
+  await uploadFile(`${folder}/latest-img`, screenshot, 'png');
+  await uploadFile(`${folder}/${dateStr}-img`, screenshot, 'png');
   await browser.close();
 }
 
@@ -134,8 +134,8 @@ async function getLatestRFW(weatherEvent){
     if(JSON.stringify(json) === JSON.stringify(jsonLatest)){
       console.log(`no new ${weatherEvent} data`);
     } else {
-      uploadFile(`${folder}/${dateStr}`, JSON.stringify(json), 'json');
-      uploadFile(`${folder}/latest`, JSON.stringify(json), 'json');
+      await uploadFile(`${folder}/${dateStr}`, JSON.stringify(json), 'json');
+      await uploadFile(`${folder}/latest`, JSON.stringify(json), 'json');
 
       useTheData(folder, color).then(stuff => {
         getObject(BUCKET_NAME, `${folder}/latest-img.png`).then(img => {
