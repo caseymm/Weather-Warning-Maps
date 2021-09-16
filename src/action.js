@@ -8,7 +8,7 @@ const events = {
   'Red Flag Warning': {
     'folder': 'rfw',
     'color': 'e60000',
-    'message': '🚩 New Red Flag Warning 🚩 \n\n A Red Flag Warning has been issued for these areas. Weather events which may result in extreme fire behavior that will occur within 24 hours. This is the highest alert. Please use extreme caution.',
+    'message': '🚩 New Red Flag Warning 🚩 \n\n A Red Flag Warning has been issued for these areas. Weather events which may result in extreme fire behavior will occur within 24 hours. This is the highest alert. Please use extreme caution.',
     'alt_message': '🚩 New Red Flag Warning 🚩 \n\n There are currently no Red Flag Warnings.'
   },
   'Fire Weather Watch': {
