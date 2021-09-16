@@ -86,20 +86,6 @@ async function uploadFile(name, data, ext) {
   });
 };
 
-async function getObject (bucket, objectKey) {
-  try {
-    const params = {
-      Bucket: bucket,
-      Key: objectKey 
-    }
-
-    const data = await s3.getObject(params).promise();
-    return data.Body.toString('base64');
-  } catch (e) {
-    throw new Error(`Could not retrieve file from S3: ${e.message}`)
-  }
-}
-
 async function useTheData(folder, color){
   // this is where screenshot stuff goes
   const browser = await playwright['chromium'].launch();
