@@ -22,7 +22,25 @@ const events = {
     'color': '808c9e',
     'message': '⛈ New Severe Thunderstorm Watch ⛈',
     'alt_message': '⛈ New Severe Thunderstorm Watch ⛈ \n\n There are currently no areas under advisement for Severe Thunderstorm Watch.'
-  }
+  },
+  'Severe Thunderstorm Warning': {
+    'folder': 'stwarning',
+    'color': '808c9e',
+    'message': '⛈ New Severe Thunderstorm Warning ⛈',
+    'alt_message': '⛈ New Severe Thunderstorm Warning ⛈ \n\n A thunderstorm producing hail one inch or larger in diameter and/or winds equal or exceed 58 miles an hour has been reported. People in the affected area should seek safe shelter immediately.'
+  },
+  'Flash Flood Watch': {
+    'folder': 'ffw',
+    'color': '808c9e',
+    'message': '🌊 New Flash Flood Watch 🌊',
+    'alt_message': '🌊 New Flash Flood Watch 🌊 \n\n Conditions exist or are developing that that are favorable for flash flooding in and close to the watch area.'
+  },
+  'Flash Flood Warning': {
+    'folder': 'ffwarning',
+    'color': '808c9e',
+    'message': '🌊 New Flash Flood Warning 🌊',
+    'alt_message': '🌊 New Flash Flood Warning 🌊 \n\n Flash flooding is in progress, imminent, or highly likely. Please seek shelter.'
+  },
 }
 
 const now = new Date();
