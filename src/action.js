@@ -124,22 +124,26 @@ async function getLatestRFW(weatherEvent){
       await uploadFile(`${folder}/${dateStr}`, JSON.stringify(json), 'json');
       await uploadFile(`${folder}/latest`, JSON.stringify(json), 'json');
 
-      useTheData(folder, color).then(img => {
-        uploadClient.post('media/upload', { media_data: img.toString('base64') }).then(result => {
-          let status = {
-            status: message,
-            media_ids: result.media_id_string
-          }
-          if(json.features.length === 0){
-            status = {
-              status: events[weatherEvent].alt_message
-            }
-          }
-          client.post('statuses/update', status).then(result => {
-            console.log('You successfully tweeted this : "' + result.text + '"');
-          }).catch(console.error);
+      if(json.features.length === 0){
+        const status = {
+          status: events[weatherEvent].alt_message
+        };
+        client.post('statuses/update', status).then(result => {
+          console.log('You successfully tweeted this : "' + result.text + '"');
         }).catch(console.error);
-      });
+      } else {
+        useTheData(folder, color).then(img => {
+          uploadClient.post('media/upload', { media_data: img.toString('base64') }).then(result => {
+            const status = {
+              status: message,
+              media_ids: result.media_id_string
+            }
+            client.post('statuses/update', status).then(result => {
+              console.log('You successfully tweeted this : "' + result.text + '"');
+            }).catch(console.error);
+          }).catch(console.error);
+        });
+      }
     }
 }
 
