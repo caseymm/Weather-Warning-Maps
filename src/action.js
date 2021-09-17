@@ -115,6 +115,7 @@ async function useTheData(folder, color){
     await page.waitForSelector('#hidden', {state: 'attached'});
   } catch(err){
     // try again
+    console.log(`${folder} try again`)
     await page.goto(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/latest.json&fill=${color}&fill-opacity=.6`);
     await page.waitForSelector('#hidden', {state: 'attached'});
   }
