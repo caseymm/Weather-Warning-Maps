@@ -148,8 +148,7 @@ async function getLatestRFW(weatherEvent){
           console.log('You successfully tweeted this : "' + result.text + '"');
         }).catch(console.error);
       } else {
-        const fileName = `${dateStr}`;
-        useTheData(folder, color, fileName).then(img => {
+        useTheData(folder, color).then(img => {
           uploadClient.post('media/upload', { media_data: img.toString('base64') }).then(result => {
             const status = {
               status: message,
