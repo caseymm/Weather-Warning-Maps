@@ -86,7 +86,8 @@ async function uploadFile(name, data, ext) {
   });
 };
 
-async function useTheData(folder, color){
+async function useTheData(folder, color, fileName){
+  console.log(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/${fileName}.json&fill=${color}&fill-opacity=.6`)
   // this is where screenshot stuff goes
   const browser = await playwright['chromium'].launch();
   const context = await browser.newContext({
@@ -94,7 +95,7 @@ async function useTheData(folder, color){
   });
   const page = await context.newPage();
   await page.setViewportSize({ width: 1200, height: 800 });
-  await page.goto(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/latest.json&fill=${color}&fill-opacity=.6`);
+  await page.goto(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/${fileName}.json&fill=${color}&fill-opacity=.6`);
   await page.waitForSelector('#hidden', {state: 'attached'});
   const screenshot = await page.screenshot();
   await uploadFile(`${folder}/latest-img`, screenshot, 'png');
@@ -132,7 +133,8 @@ async function getLatestRFW(weatherEvent){
           console.log('You successfully tweeted this : "' + result.text + '"');
         }).catch(console.error);
       } else {
-        useTheData(folder, color).then(img => {
+        const fileName = `${dateStr}`;
+        useTheData(folder, color, fileName).then(img => {
           uploadClient.post('media/upload', { media_data: img.toString('base64') }).then(result => {
             const status = {
               status: message,
