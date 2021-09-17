@@ -17,18 +17,18 @@ const events = {
     'message': '🏳 New Fire Weather Watch Alert 🏳 \n\nA Fire Weather Watch has been issued for these areas. Weather events which may result in extreme fire behavior could exist in the next 12-72 hours.',
     'alt_message': '🏳 Cleared: Fire Weather Watch Alert 🏳 \n\nThere are currently no areas under a Fire Weather Watch Alert.'
   },
-  'Severe Thunderstorm Watch': {
-    'folder': 'stw',
-    'color': '808c9e',
-    'message': '⛈ New Severe Thunderstorm Watch ⛈ \n\nConditions are favorable for the development of severe thunderstorms in and close to the watch area.',
-    'alt_message': '⛈ Cleared: Severe Thunderstorm Watch ⛈ \n\nThere are currently no areas under advisement for Severe Thunderstorm Watch.'
-  },
-  'Severe Thunderstorm Warning': {
-    'folder': 'stwarning',
-    'color': '808c9e',
-    'message': '⛈ New Severe Thunderstorm Warning ⛈ \n\nA thunderstorm producing hail one inch or larger in diameter and/or winds equal or exceed 58 miles an hour has been reported. People in the affected area should seek safe shelter immediately.',
-    'alt_message': '⛈ Cleared: Severe Thunderstorm Warning ⛈ \n\nThere are currently no areas under advisement for Severe Thunderstorm Warning.'
-  },
+  // 'Severe Thunderstorm Watch': {
+  //   'folder': 'stw',
+  //   'color': '808c9e',
+  //   'message': '⛈ New Severe Thunderstorm Watch ⛈ \n\nConditions are favorable for the development of severe thunderstorms in and close to the watch area.',
+  //   'alt_message': '⛈ Cleared: Severe Thunderstorm Watch ⛈ \n\nThere are currently no areas under advisement for Severe Thunderstorm Watch.'
+  // },
+  // 'Severe Thunderstorm Warning': {
+  //   'folder': 'stwarning',
+  //   'color': '808c9e',
+  //   'message': '⛈ New Severe Thunderstorm Warning ⛈ \n\nA thunderstorm producing hail one inch or larger in diameter and/or winds equal or exceed 58 miles an hour has been reported. People in the affected area should seek safe shelter immediately.',
+  //   'alt_message': '⛈ Cleared: Severe Thunderstorm Warning ⛈ \n\nThere are currently no areas under advisement for Severe Thunderstorm Warning.'
+  // },
   'Flash Flood Watch': {
     'folder': 'ffw',
     'color': '00008a',
@@ -95,7 +95,7 @@ async function useTheData(folder, color){
   const page = await context.newPage();
   await page.setViewportSize({ width: 1200, height: 800 });
   await page.goto(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/latest.json&fill=${color}&fill-opacity=.6`, { waitUntil: 'networkidle' });
-  await page.waitForSelector('#hidden', {state: 'hidden'});
+  // await page.waitForSelector('#hidden', {state: 'hidden'});
   const screenshot = await page.screenshot();
   await uploadFile(`${folder}/latest-img`, screenshot, 'png');
   await uploadFile(`${folder}/${dateStr}-img`, screenshot, 'png');
