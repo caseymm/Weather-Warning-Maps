@@ -41,6 +41,18 @@ const events = {
     'message': '🌊 New Flash Flood Warning 🌊 \n\nFlash flooding is in progress, imminent, or highly likely. Please seek shelter.',
     'alt_message': '🌊 Cleared: Flash Flood Warning 🌊 \n\nThere are currently no areas under advisement for Flash Flooding.'
   },
+  'Hurricane Watch': {
+    'folder': 'hw',
+    'color': '00ceed',
+    'message': '🌀 New Hurricane Watch 🌀 \n\nA tropical cyclone containing winds of at least 74 MPH poses a possible threat, generally within 48 hours. A watch does not mean hurricane conditions will occur, only that these conditions are possible.',
+    'alt_message': '🌀 Cleared: Hurricane Watch 🌀 \n\nThere are currently no areas under advisement for Hurricane Watch.'
+  },
+  'Hurricane Warning': {
+    'folder': 'hwarning',
+    'color': '00ceed',
+    'message': '🌀 New Hurricane Warning 🌀 \n\nHurricane conditions (sustained winds of 74 mph+) are expected in this area. This warning is usually issued 36 hours in advance of tropical storm-force winds to give you time to complete your preparations. Evacuate immediately if so ordered.',
+    'alt_message': '🌀 Cleared: Hurricane Warning 🌀 \n\nThere are currently no areas under advisement for Hurricane Warning.'
+  },
 }
 
 const now = new Date();
