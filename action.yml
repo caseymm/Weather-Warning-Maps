@@ -1,7 +1,0 @@
-name: 'Push to s3'
-description: 'Push to s3'
-author: 'casey'
-
-runs:
-  using: 'docker'
-  image: 'Dockerfile'

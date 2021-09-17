@@ -15,7 +15,7 @@ env:
   TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
 
 jobs:
-  test:
+  update_data:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
