@@ -111,14 +111,7 @@ async function useTheData(folder, color){
   const page = await context.newPage();
   await page.setViewportSize({ width: 1200, height: 800 });
   await page.goto(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/latest.json&fill=${color}&fill-opacity=.6`);
-  try{
-    await page.waitForSelector('#hidden', {state: 'attached'});
-  } catch(err){
-    // try again
-    console.log(`${folder} try again`)
-    await page.goto(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/latest.json&fill=${color}&fill-opacity=.6`);
-    await page.waitForSelector('#hidden', {state: 'attached'});
-  }
+  await page.waitForSelector('#hidden', {state: 'attached'});
   const screenshot = await page.screenshot();
   await uploadFile(`${folder}/latest-img`, screenshot, 'png');
   await uploadFile(`${folder}/${dateStr}-img`, screenshot, 'png');
