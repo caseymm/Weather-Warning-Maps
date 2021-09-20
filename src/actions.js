@@ -1,21 +1,8 @@
 import AWS from 'aws-sdk';
-import twitter from 'twitter-lite';
 import playwright from 'playwright';
 import dateFormat from 'dateformat';
 
-const client = new twitter({
-  consumer_key: process.env.TWITTER_CONSUMER_KEY,  
-  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,  
-  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,  
-  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-});
-const uploadClient = new twitter({
-  consumer_key: process.env.TWITTER_CONSUMER_KEY,  
-  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,  
-  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,  
-  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
-  subdomain: "upload"
-});
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // The name of the bucket that you have created
 const BUCKET_NAME = 'weather-warnings';
@@ -49,7 +36,6 @@ async function uploadFile(name, data, ext) {
 };
 
 async function useTheData(folder, color){
-  console.log(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/latest.json&fill=${color}&fill-opacity=.6`)
   // this is where screenshot stuff goes
   const browser = await playwright['chromium'].launch();
   const context = await browser.newContext({
@@ -62,7 +48,9 @@ async function useTheData(folder, color){
     await page.waitForSelector('#hidden', {state: 'attached'});
   } catch(err){
     // try again
+    await delay(5000) // waiting 5 seconds
     console.log(`${folder} try again`)
+    console.log(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/latest.json&fill=${color}&fill-opacity=.6`)
     await page.goto(`https://caseymm.github.io/mbx-devour/?url=https://weather-warnings.s3.us-west-1.amazonaws.com/${folder}/latest.json&fill=${color}&fill-opacity=.6`);
     await page.waitForSelector('#hidden', {state: 'attached'});
   }
