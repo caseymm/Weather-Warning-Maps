@@ -32,7 +32,11 @@ async function getLatestRFW(weatherEvent){
     // if what we just pulls doesn't equal the lastest version we have, save it
     if(JSON.stringify(json) === JSON.stringify(jsonLatest)){
       console.log(`no new ${weatherEvent} data`);
-      await uploadFile(`events-to-update`, JSON.stringify(haveUpdates), 'json');
+      ct++;
+      if(ct === Object.keys(events).length){
+        // Write the file
+        await uploadFile(`events-to-update`, JSON.stringify(haveUpdates), 'json');
+      }
     } else {
       await uploadFile(`${folder}/${dateStr}`, JSON.stringify(json), 'json');
       await uploadFile(`${folder}/latest`, JSON.stringify(json), 'json');
