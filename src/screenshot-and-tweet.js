@@ -17,8 +17,6 @@ const uploadClient = new twitter({
   subdomain: "upload"
 });
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
 async function screenshotAndTweet(weatherEvent){
   const folder = weatherEvent.folder;
   const color = weatherEvent.color;
@@ -44,7 +42,6 @@ async function getWeatherEvents(){
   if(weatherEvents.length > 0){
     weatherEvents.forEach(we => {
       screenshotAndTweet(events[we]);
-      await delay(5000) // waiting 5 seconds
     })
   } else {
     console.log('Nothing to update');
