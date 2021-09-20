@@ -17,9 +17,12 @@ env:
 jobs:
   update_data:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v2
       - run: npm install
       - run: npm install playwright-chromium
-      - run: yarn run-script
+      - run: yarn get-data
+      - run: yarn wait
+      - run: yarn screenshot-and-tweet
 

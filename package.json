@@ -7,7 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "ncc build src/action.js -o dist",
-    "run-script": "node -r dotenv/config src/action.js"
+    "get-data": "node -r dotenv/config src/get-data.js",
+    "screenshot-and-tweet": "node -r dotenv/config src/screenshot-and-tweet.js",
+    "wait": "node src/wait.js"
   },
   "repository": {
     "type": "git",
