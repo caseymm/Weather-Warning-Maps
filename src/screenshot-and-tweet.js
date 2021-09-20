@@ -18,7 +18,6 @@ const uploadClient = new twitter({
 });
 
 async function screenshotAndTweet(weatherEvent){
-  console.log(weatherEvent)
   const folder = weatherEvent.folder;
   const color = weatherEvent.color;
   let message = weatherEvent.message;
