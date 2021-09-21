@@ -46,6 +46,30 @@ const events = {
     'color': '00ceed',
     'message': '🌀 New Hurricane Warning 🌀 \n\nHurricane conditions (sustained winds of 74 mph+) are expected in this area. This warning is usually issued 36 hours in advance of tropical storm-force winds to give you time to complete your preparations. Evacuate immediately if so ordered.',
     'alt_message': '🌀 Cleared: Hurricane Warning 🌀 \n\nThere are currently no areas under advisement for Hurricane Warning.'
+  },
+  'Tornado Watch': {
+    'folder': 'tw',
+    'color': 'f0c829',
+    'message': '🌪 New Tornado Watch 🌪 \n\nConditions are favorable for the development of tornadoes in and close to the watch area. This type of alert is usually issued for a duration of 4 to 8 hours.',
+    'alt_message': '🌪 Cleared: Tornado Watch 🌪 \n\nThere are currently no areas under advisement for Tornado Watch.'
+  },
+  'Tornado Warning': {
+    'folder': 'twarning',
+    'color': 'f0c829',
+    'message': '🌪 New Tornado Warning 🌪 \n\nA tornado is indicated by the WSR-88D radar or has been sighted by spotters. People in the affected area should seek safe shelter immediately.',
+    'alt_message': '🌪 Cleared: Tornado Warning 🌪 \n\nThere are currently no Tornado Warnings in place.'
+  },
+  'Tropical Storm Watch': {
+    'folder': 'tsw',
+    'color': '017a01',
+    'message': '☔️ New Tropical Storm Watch ☔️ \n\nTropical storm conditions (sustained winds of 39 to 73 mph) are possible within the specified area within 48 hours.',
+    'alt_message': '☔️ Cleared: Tropical Storm Watch ☔️ \n\nThere are currently no areas under advisement for Tropical Storm Watch.'
+  },
+  'Tropical Storm Warning': {
+    'folder': 'tswarning',
+    'color': '017a01',
+    'message': '☔️ New Tropical Storm Warning ☔️ \n\nTropical storm conditions (sustained winds of 39 to 73 mph) are expected within your area within 36 hours.',
+    'alt_message': '☔️ Cleared: Tropical Storm Warning ☔️ \n\nThere are currently no Tropical Storm Warnings in place.'
   }
 };
 
