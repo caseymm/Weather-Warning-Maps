@@ -11,7 +11,6 @@ import mapCoordinates from 'geojson-apply-right-hand-rule';
 // const dissolved = dissolve(data.default);
 var options = {tolerance: 0.15, highQuality: true, mutate: true};
 var simplified = simplify(data.default, options);
-// console.log(simplified)
 
 const trimmed = gp.parse(simplified, 1);
 
